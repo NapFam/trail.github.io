@@ -193,7 +193,8 @@
 
 	var PIcon = L.AwesomeMarkers.icon({icon: 'check', markerColor: 'green', prefix: 'fa', iconColor: 'white'});
 	var DIcon = L.AwesomeMarkers.icon({icon: 'user', markerColor: 'purple', prefix: 'fa', iconColor: 'white'});
-	
+	var CIcon = L.AwesomeMarkers.icon({icon: 'gift', markerColor: 'darkblue', prefix: 'fa', iconColor: 'white'});
+	    
 	var styleP =  {color:'#008000', opacity: 1.0, fillOpacity: 0.5, weight: 1, clickable: true};
 	
 	var style_avec =    {fillColor:false,color:'OrangeRed ', opacity: 1.0, weight: 2, clickable: true, fillOpacity:0};
@@ -212,8 +213,10 @@
 			pointToLayer: function(feature, latlng) { 
 				if (feature['properties']['Name'].includes('km')===true){//point KM
 					return L.marker(latlng, {icon: PIcon}).bindPopup(feature['properties']['Name'],customOptions)
-				}else{	//ravito
-					return L.marker(latlng, {icon: DIcon}).bindPopup(feature['properties']['Name'],customOptions)}
+				}elif (feature['properties']['Name'].includes('Ravito')===true){	//ravito
+					return L.marker(latlng, {icon: DIcon}).bindPopup(feature['properties']['Name'],customOptions)
+				}else{return L.marker(latlng, {icon: CIcon}).bindPopup(feature['properties']['Name'],customOptions)}
+				
 			} ,
 			onEachFeature: function (feature, layer) {
 				layer.on('mouseover', function highlightFeature(e) {
