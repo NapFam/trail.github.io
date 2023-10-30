@@ -1,10 +1,4 @@
-﻿# [Parcours VV](http://NapFa.github.io/trail)
-Une simple page en Leaflet pour afficher le parcours de la course Veni Vici 2023
+﻿# [Parcours Vrni Vici](https://napfam.github.io/trail.github.io)
+ Usage privé
 
-[Essayer](http://NapFa.github.io/trail)
-
-utilise:
-- http://makinacorpus.github.io/Leaflet.FileLayer/
-- http://makinacorpus.github.io/Leaflet.FileLayer/togeojson/
-- https://domoritz.github.io/leaflet-locatecontrol/
-- l.control.geosearch.js
+[Essayer](https://napfam.github.io/trail.github.io/#5/46.514/2.329)
