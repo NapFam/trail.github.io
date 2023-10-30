@@ -212,10 +212,10 @@
 		layerOptions: {
 			pointToLayer: function(feature, latlng) { 
 				if (feature['properties']['Name'].includes('km')===true){//point KM
-					return L.marker(latlng, {icon: PIcon}).bindPopup(feature['properties']['Name'],customOptions)
-				}elif (feature['properties']['Name'].includes('Ravito')===true){	//ravito
-					return L.marker(latlng, {icon: DIcon}).bindPopup(feature['properties']['Name'],customOptions)
-				}else{return L.marker(latlng, {icon: CIcon}).bindPopup(feature['properties']['Name'],customOptions)}
+					return L.marker(latlng, {icon: PIcon}).bindPopup(feature['properties']['Name'],customOptions);
+				}else if (feature['properties']['Name'].includes('Ravito')===true){	//ravito
+					return L.marker(latlng, {icon: DIcon}).bindPopup(feature['properties']['Name'],customOptions);
+				}else{return L.marker(latlng, {icon: CIcon}).bindPopup(feature['properties']['Name'],customOptions);}
 				
 			} ,
 			onEachFeature: function (feature, layer) {
@@ -241,71 +241,12 @@
 			}
 		}
 	}).addTo(map);
-	   
-           control.loader.on('data:loaded', function (e) {
+	
+	control.loader.on('data:loaded', function (e) {
              // Remove old control, if any
-             if (window.searchControl)
-             {
-               map.removeControl(window.searchControl);
-             }
+             if (window.searchControl)  {map.removeControl(window.searchControl); }
 
-             // Add search gadget for this layer
-             window.searchControl= new L.control.search({
-               layer: e.layer,
-               propertyName: 'rec',
-               initial: false,
-               textErr: 'Parcelle non trouvée',	//error message
-            		textCancel: 'Annuler',		    //title in cancel button
-            		textPlaceholder: 'Rechercher une parcelle...',
-               minLength: 0,					//minimal text length for autocomplete
-            		casesensitive: false,			//search elements in case sensitive text
-            		autoType: true,
-               firstTipSubmit: true,			//auto select first result con enter click
-     		      autoResize: true,
-               tooltipLimit: 5,
-               moveToLocation: function(latlng, title, map) {
-         			//map.fitBounds( latlng.layer.getBounds() );
-         			var zoom = map.getBoundsZoom(latlng.layer.getBounds());
-           			map.setView(latlng, zoom); // access the zoom
-         		}
-            });
-
-             map.addControl(window.searchControl);
-	     var legend = L.control({position: 'bottomright'});
-	       legend.onAdd = function (map) {
-
-          var div = L.DomUtil.create('div', 'info legend'),
-          couleurs = ['#008000', '#ffa07a', '#da70d6', '#666','#ffff00','#ff0000'],
-          valeurs = ['Privé', 'Concédé', 'Mixte', 'Tiers','Écart','Absence'],
-          labels = ['<strong>Légende:</strong>']
-
-
-
-          for (var i = 0; i < couleurs.length; i++) {
-                 col = couleurs [i];
-                vf=valeurs [i];
-            labels.push(
-                '<i style="background:' + col + '"></i> ' + vf );
-                }
-                div.innerHTML = labels.join('<br>');
-                return div;
-                };
-	  if (!(map.legenddisplay)) {
-          legend.addTo(map);
-          map.legenddisplay = this;}
-
-
-
-           
-           });
-           
-	//map.on('baselayerchange',function(eo)
-	//  {
-	//   if( eo.name == "OSM Sombre" &&  map.hasLayer(ign_parcelaire)) {
-	//     map.removeLayer(ign_parcelaire);
-	//	 map.addLayer(ign_parcelaire_o);
-	//   }
-	// })	
+	 });
 	
 	 map.on('zoomend',function(e){
 		 zoomlev=map.getZoom();
@@ -322,64 +263,61 @@
 	    }).addTo(map);
 	    
 	 var lc = L.control.locate({
-    	     position: 'topleft',
-             flyTo : true,
+		 position: 'topleft',
+		 flyTo : true,
 	     locateOptions: {
-               enableHighAccuracy: true,
-	       maxZoom: 18,
-             },
-             strings: {
-             title: "Se localiser"
-             }
-             }).addTo(map);
+		 enableHighAccuracy: true,
+		 maxZoom: 18,},
+		 strings: { title: "Se localiser" }
+    }).addTo(map);
 
 			  // define toolbar options
-var optionspm = {
-    position: 'bottomleft', // toolbar position, options are 'topleft', 'topright', 'bottomleft', 'bottomright'
-    drawMarker: true,  // adds button to draw markers
-    drawPolygon: true,  // adds button to draw a polygon
-    drawPolyline: true,  // adds button to draw a polyline
-    drawCircle: true,  // adds button to draw a cricle
-    editPolygon: true,  // adds button to toggle global edit mode
-    deleteLayer: true   // adds a button to delete layers
-};
+	var optionspm = {
+		position: 'bottomleft', // toolbar position, options are 'topleft', 'topright', 'bottomleft', 'bottomright'
+		drawMarker: true,  // adds button to draw markers
+		drawPolygon: true,  // adds button to draw a polygon
+		drawPolyline: true,  // adds button to draw a polyline
+		drawCircle: true,  // adds button to draw a cricle
+		editPolygon: true,  // adds button to toggle global edit mode
+		deleteLayer: true   // adds a button to delete layers
+	};
 
-// add leaflet.pm controls to the map
-map.pm.addControls(optionspm);
+	// add leaflet.pm controls to the map
+	map.pm.addControls(optionspm);
 
-function downloadURI(uri, name) {
-  var link = document.createElement("a");
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  delete link;
-}
-
-
-
-
-
-const myLayerGroup = L.layerGroup([]);
-map.on('pm:create', (e) => {
-  
-  var nom = prompt("Entrer un nom", "...");
-  e.layer.bindTooltip("<span style='font-size:16px'><b>"+nom+"</b></span>");
-  
-  var feature = e.layer.feature = e.layer.feature || {};
-	feature.type = "Feature";
-	feature.properties = feature.properties || {};
-	feature.properties["Nom"] = nom;
-	feature.properties["created"]=showTime();
-	console.log(e.shape)
-	if (e.shape==="Circle"){
-	var rad = e.layer.getRadius();
-	feature.properties["radius"] = rad;
+	function downloadURI(uri, name) {
+	  var link = document.createElement("a");
+	  link.download = name;
+	  link.href = uri;
+	  document.body.appendChild(link);
+	  link.click();
+	  document.body.removeChild(link);
+	  delete link;
 	}
-  myLayerGroup.addLayer(e.layer);
-  console.log(myLayerGroup);
-});
+
+
+
+
+
+	const myLayerGroup = L.layerGroup([]);
+	map.on('pm:create', (e) => {
+	  
+	  var nom = prompt("Entrer un nom", "...");
+	  e.layer.bindTooltip("<span style='font-size:16px'><b>"+nom+"</b></span>");
+	  
+	  var feature = e.layer.feature = e.layer.feature || {};
+		feature.type = "Feature";
+		feature.properties = feature.properties || {};
+		feature.properties["Nom"] = nom;
+		feature.properties["created"]=showTime();
+		console.log(e.shape)
+		if (e.shape==="Circle"){
+		var rad = e.layer.getRadius();
+		feature.properties["radius"] = rad;
+		}
+	  myLayerGroup.addLayer(e.layer);
+	  console.log(myLayerGroup);
+	});
 
 
         // on click, clear all layers 
