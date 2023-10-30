@@ -279,6 +279,8 @@
           valeurs = ['Privé', 'Concédé', 'Mixte', 'Tiers','Écart','Absence'],
           labels = ['<strong>Légende:</strong>']
 
+
+
           for (var i = 0; i < couleurs.length; i++) {
                  col = couleurs [i];
                 vf=valeurs [i];
@@ -288,6 +290,13 @@
                 div.innerHTML = labels.join('<br>');
                 return div;
                 };
+	  if (!(map.legenddisplay)) {
+          legend.addTo(map);
+          map.legenddisplay = this;}
+
+
+
+           
            });
            
 	//map.on('baselayerchange',function(eo)
